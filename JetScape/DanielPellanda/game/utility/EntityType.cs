@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DanielPellanda.game.utility
+namespace JetScape.game.utility
 {
     public class EntityType
     {
@@ -18,19 +18,21 @@ namespace DanielPellanda.game.utility
         public const int TELEPORT = 7;
         public const int COIN = 8;
 
-        private enum Type { UNDEFINED, PLAYER, MISSILE, ZAPPER, ZAPPERBASE, ZAPPERRAY, SHIELD, TELEPORT, COIN };
-        private Type value = UNDEFINED;
+        private enum Type { UNDEFINED = EntityType.UNDEFINED, PLAYER = EntityType.PLAYER, MISSILE = EntityType.MISSILE, 
+            ZAPPER = EntityType.ZAPPER, ZAPPERBASE = EntityType.ZAPPERBASE, ZAPPERRAY = EntityType.ZAPPERRAY, 
+            SHIELD = EntityType.SHIELD, TELEPORT = EntityType.TELEPORT, COIN = EntityType.COIN};
+        private Type _value = EntityType.UNDEFINED;
 
         public static IList<EntityType> ALL_ENTITY_TYPE = new List<EntityType>() {
             PLAYER, ZAPPER, MISSILE, SHIELD, TELEPORT, COIN };
 
-        EntityType(int value) => this.value = (Type)value;
+        private EntityType(int value) => this._value = (Type) value;
 
         public static implicit operator EntityType(int value) => value >= 0 && value <= 8 ? new EntityType(value) : new EntityType(0);
 
         public bool IsGenerableEntity()
         {
-            switch (value)
+            switch (_value)
             {
                 case Type.MISSILE:
                 case Type.ZAPPER:
@@ -47,7 +49,7 @@ namespace DanielPellanda.game.utility
         }
         public bool IsObstacle()
         {
-            switch (value)
+            switch (_value)
             {
                 case Type.MISSILE:
                 case Type.ZAPPER:
@@ -61,7 +63,7 @@ namespace DanielPellanda.game.utility
         }
         public bool IsPickUp()
         {
-            switch (value)
+            switch (_value)
             {
                 case Type.SHIELD:
                 case Type.TELEPORT:
@@ -73,17 +75,17 @@ namespace DanielPellanda.game.utility
             return false;
         }
 
-        public static implicit operator int(EntityType type) => (int)type.value;
+        public static implicit operator int(EntityType type) => (int)type._value;
         public static bool operator ==(EntityType left, EntityType right) => Equals(left, right);
         public static bool operator !=(EntityType left, EntityType right) => !Equals(left, right);
 
-        public override int GetHashCode() => value.GetHashCode();
+        public override int GetHashCode() => _value.GetHashCode();
         public bool Equals(EntityType other)
         {
             if (ReferenceEquals(other, null)) return false;
             if (ReferenceEquals(other, this)) return true;
 
-            return Equals(value, other.value);
+            return Equals(_value, other._value);
         }
         public override bool Equals(object obj)
         {
@@ -92,6 +94,6 @@ namespace DanielPellanda.game.utility
 
             return Equals(obj as EntityType);
         }
-        public override string ToString() => value.ToString().ToLower();
+        public override string ToString() => _value.ToString().ToLower();
     }
 }

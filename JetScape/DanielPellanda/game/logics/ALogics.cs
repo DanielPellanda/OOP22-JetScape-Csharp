@@ -5,21 +5,21 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace DanielPellanda.game.logics
+namespace JetScape.game.logics
 {
     public abstract class ALogics : ILogics
     {
 
-        private static int frameTime;
-        private static int difficultyLevel = 1;
+        private static int _frameTime;
+        private static int _difficultyLevel = 1;
 
         private const int INCREASE_DIFF_PER_SCORE = 250;
 
         private const double SPAWN_INTERVAL = 3.3;
         private const double CLEAN_INTERVAL = 5.0;
 
-        public static int FrameTime { get => frameTime; }
-        public static int DifficultyLevel { protected set => difficultyLevel = value; get => difficultyLevel; }
+        public static int FrameTime { get => _frameTime; }
+        public static int DifficultyLevel { protected set => _difficultyLevel = value; get => _difficultyLevel; }
         public static int IncreaseDiffPerScore { get => INCREASE_DIFF_PER_SCORE; }
         protected static double SpawnInterval { get => SPAWN_INTERVAL; }
         protected static double CleanInterval { get => CLEAN_INTERVAL; }
@@ -30,7 +30,7 @@ namespace DanielPellanda.game.logics
                private Map<EntityType, SpeedHandler> entitiesSpeed =
                        Map.of(EntityType.MISSILE, new SpeedHandler(500.0, 10.0, 5000.0));*/
 
-        protected static void UpdateTimer() => frameTime++;
+        protected static void UpdateTimer() => _frameTime++;
 
         /*
         protected SpeedHandler getEntityMovementInfo(final EntityType type)

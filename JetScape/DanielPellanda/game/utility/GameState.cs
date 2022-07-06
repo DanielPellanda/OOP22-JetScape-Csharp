@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DanielPellanda.game.utility
+namespace JetScape.game.utility
 {
     public enum GameState
     {

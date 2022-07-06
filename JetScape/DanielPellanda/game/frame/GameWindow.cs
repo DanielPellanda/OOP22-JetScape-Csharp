@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DanielPellanda.game.frame
+namespace JetScape.game.frame
 {
     public class GameWindow
     {

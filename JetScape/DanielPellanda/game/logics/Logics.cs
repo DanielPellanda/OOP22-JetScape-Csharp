@@ -1,39 +1,39 @@
-using DanielPellanda.game.frame;
-using DanielPellanda.game.logics.entities;
-using DanielPellanda.game.logics.entities.player;
-using DanielPellanda.game.logics.generator;
-using DanielPellanda.game.utility;
+using JetScape.game.frame;
+using JetScape.game.logics.entities;
+using JetScape.game.logics.entities.player;
+using JetScape.game.logics.generator;
+using JetScape.game.utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DanielPellanda.game.logics
+namespace JetScape.game.logics
 {
     public delegate void Cleaner(Predicate<EntityType> typeCondition, Predicate<IEntity> entityCondition);
 
-    public class Logics : ALogics
+    public class Logics : ALogics, ILogics
     {
-        private readonly IDictionary<EntityType, ISet<IEntity>> entities = new Dictionary<EntityType, ISet<IEntity>>();
-        private readonly IPlayer playerEntity;
-        private IGenerator spawner;
+        private readonly IDictionary<EntityType, ISet<IEntity>> _entities = new Dictionary<EntityType, ISet<IEntity>>();
+        private readonly IPlayer _playerEntity;
+        private IGenerator _spawner;
 
-        private GameState gameState;
+        private GameState _gameState;
 
-        public IDictionary<EntityType, ISet<IEntity>> Entities { get => entities; }
+        public IDictionary<EntityType, ISet<IEntity>> Entities { get => _entities; }
 
         public Logics() : base()
         {
 
             foreach (EntityType e in EntityType.ALL_ENTITY_TYPE)
             {
-                entities.Add(e, new HashSet<IEntity>());
+                _entities.Add(e, new HashSet<IEntity>());
             }
 
-            playerEntity = new Player(this);
+            _playerEntity = new Player(this);
 
-            spawner = new Generator(Entities, SpawnInterval);
+            _spawner = new Generator(Entities, SpawnInterval);
             //this.initializeSpawner();
         }
 
@@ -84,10 +84,10 @@ namespace DanielPellanda.game.logics
         {
             return delegate (Predicate<EntityType> typeCondition, Predicate<IEntity> entityCondition)
             {
-                spawner.Mutex.WaitOne();
+                _spawner.Mutex.WaitOne();
 
                 var typesToClean =
-                    from s in entities
+                    from s in _entities
                     where typeCondition.Invoke(s.Key)
                     select s.Value;
                 foreach (ISet<IEntity> s in typesToClean)
@@ -104,83 +104,83 @@ namespace DanielPellanda.game.logics
                 }
                 //GameWindow.GAME_DEBUGGER.printLog(Debugger.Option.LOG_CLEAN, "cleaned::" + e.toString()
 
-                spawner.Mutex.ReleaseMutex();
+                _spawner.Mutex.ReleaseMutex();
             };
         }
 
         private void ResetGame()
         {
             GetEntitiesCleaner().Invoke(t => t != EntityType.PLAYER, e => true);
-            playerEntity.Reset();
+            _playerEntity.Reset();
         }
 
         private void UpdateCleaner()
         {
             if (FrameTime % GameWindow.FPS_LIMIT * CleanInterval == 0)
             {
-                GetEntitiesCleaner().Invoke(t => t.IsGenerableEntity(), e => e.IsOnClearArea());
+                GetEntitiesCleaner().Invoke(t => t.IsGenerableEntity(), e => e.IsOnClearArea);
             }
         }
 
         private void UpdateDifficulty()
         {
-            DifficultyLevel = playerEntity.CurrentScore() / IncreaseDiffPerScore + 1;
+            DifficultyLevel = _playerEntity.CurrentScore() / IncreaseDiffPerScore + 1;
         }
 
         private void SetGameState(GameState gs)
         {
-            if (gameState != gs)
+            if (_gameState != gs)
             {
                 switch (gs)
                 {
                     case GameState.INGAME:
-                        if (gameState == GameState.ENDGAME)
+                        if (_gameState == GameState.ENDGAME)
                         { // RETRY
                             ResetGame();
                         }
-                        else if (gameState == GameState.MENU)
+                        else if (_gameState == GameState.MENU)
                         { // START
                             ResetGame();
-                            entities[EntityType.PLAYER].Add(playerEntity);
+                            _entities[EntityType.PLAYER].Add(_playerEntity);
                         }
-                        spawner.Resume();
+                        _spawner.Resume();
                         break;
                     case GameState.MENU:
-                        if (gameState == GameState.PAUSED)
+                        if (_gameState == GameState.PAUSED)
                         {
-                            spawner.Stop();
+                            _spawner.Stop();
                             return;
                         }
                         GetEntitiesCleaner().Invoke(t => true, e => true);
                         break;
                     case GameState.ENDGAME:
-                        spawner.Stop();
+                        _spawner.Stop();
                         break;
                     case GameState.PAUSED:
-                        if (gameState != GameState.INGAME)
+                        if (_gameState != GameState.INGAME)
                         {
                             return;
                         }
-                        spawner.Pause();
+                        _spawner.Pause();
                         break;
                     default:
                         break;
                 }
-                gameState = gs;
+                _gameState = gs;
             }
         }
         public override void UpdateAll()
         {
-            switch (gameState)
+            switch (_gameState)
             {
                 case GameState.EXIT:
-                    spawner.Terminate();
+                    _spawner.Terminate();
                     break;
                 case GameState.ENDGAME:
-                    playerEntity.Update();
+                    _playerEntity.Update();
                     break;
                 case GameState.INGAME:
-                    if (playerEntity.hasDied())
+                    if (_playerEntity.hasDied())
                     {
                         SetGameState(GameState.ENDGAME);
                         break;
@@ -188,15 +188,15 @@ namespace DanielPellanda.game.logics
                     UpdateDifficulty();
                     UpdateCleaner();
 
-                    spawner.Mutex.WaitOne();
-                    foreach (ISet<IEntity> sets in entities.Keys)
+                    _spawner.Mutex.WaitOne();
+                    foreach (ISet<IEntity> sets in _entities.Keys)
                     {
                         foreach (IEntity entity in sets)
                         {
                             entity.Update();
                         }
                     }
-                    spawner.Mutex.ReleaseMutex();
+                    _spawner.Mutex.ReleaseMutex();
                     break;
                 default:
                     break;

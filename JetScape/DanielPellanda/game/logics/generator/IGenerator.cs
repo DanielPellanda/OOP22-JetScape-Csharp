@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 
-namespace DanielPellanda.game.logics.generator
+namespace JetScape.game.logics.generator
 {
     public interface IGenerator
     {
