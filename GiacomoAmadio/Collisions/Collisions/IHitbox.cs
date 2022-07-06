@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms.PaintEventHandler;
 
-namespace Collisions
+namespace GiacomoAmadio.Collisions
 {
     public interface IHitbox
     {

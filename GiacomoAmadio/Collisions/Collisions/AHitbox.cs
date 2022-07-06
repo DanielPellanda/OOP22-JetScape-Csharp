@@ -4,9 +4,9 @@ using System.Drawing;
 using System.Collections.Immutable;
 
 
-namespace Collisions
+namespace GiacomoAmadio.Collisions
 {
-    public abstract class HitboxInstance : IHitbox
+    public abstract class AHitbox : IHitbox
     {
         private const int SPRITE_DIMENSIONS = 32;
         private const int CURRENT_TILE_SIZE = 32;
@@ -14,7 +14,7 @@ namespace Collisions
         private KeyValuePair<double, double> _currentPos;
         private readonly ISet<Rectangle> _rectangles;
 
-        public HitboxInstance(KeyValuePair<double, double> startPos)
+        public AHitbox(KeyValuePair<double, double> startPos)
         {
             _hitboxes = new Dictionary<Rectangle, KeyValuePair<double, double>>();
             _currentPos = startPos;
@@ -51,6 +51,6 @@ namespace Collisions
         protected void addHitbox(IHitbox hitbox) => _rectangles.UnionWith(hitbox.GetRectangles());
 
         private double scale(double x) => CURRENT_TILE_SIZE * (x / SPRITE_DIMENSIONS);
-             
+
     }
 }
