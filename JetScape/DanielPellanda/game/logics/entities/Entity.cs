@@ -4,13 +4,14 @@ using System.Drawing;
 using System.Text;
 
 using JetScape.game.utility;
+using JetScape.game.frame;
 
 namespace JetScape.game.logics.entities
 {
     public class Entity : IEntity
     {
-        protected const int Y_TOP_LIMIT = 0;
-        protected const int Y_LOW_LIMIT = GameWindow.GAME_SCREEN.getHeight() - (GameWindow.GAME_SCREEN.getTileSize() * 2);
+        protected static readonly int Y_TOP_LIMIT = 0;
+        protected static readonly int Y_LOW_LIMIT = GameWindow.ScreenInfo.Height - (GameWindow.ScreenInfo.TileSize * 2);
 
         private readonly Point _startPos;
         private Point _position;
@@ -52,13 +53,13 @@ namespace JetScape.game.logics.entities
             this._position.Y = y;
         }
 
-        public void Reset()
+        public virtual void Reset()
         {
             this.SetNewPosition(_startPos.X, _startPos.Y);
             //this.hitbox.updatePosition(_position);
         }
 
-        public void Clean()
+        public virtual void Clean()
         {
             this.Reset();
             EntityCleaner.Invoke(t => EntityType == t, e => this == e);
@@ -66,9 +67,9 @@ namespace JetScape.game.logics.entities
 
         private void UpdateFlags()
         {
-            if (Position.X >= -GameWindow.GAME_SCREEN.getTileSize()
-                    && Position.X <= GameWindow.GAME_SCREEN.getWidth()
-                    && Position.Y >= 0 && Position.Y <= GameWindow.GAME_SCREEN.getHeight())
+            if (Position.X >= -GameWindow.ScreenInfo.TileSize
+                    && Position.X <= GameWindow.ScreenInfo.Width
+                    && Position.Y >= 0 && Position.Y <= GameWindow.ScreenInfo.Height)
             {
                 _onScreen = true;
                 _onClearArea = false;
@@ -76,12 +77,12 @@ namespace JetScape.game.logics.entities
             }
             else
             {
-                if (Position.X < -GameWindow.GAME_SCREEN.getTileSize())
+                if (Position.X < -GameWindow.ScreenInfo.TileSize)
                 {
                     _onClearArea = true;
                     _onSpawnArea = false;
                 }
-                else if (Position.X >= GameWindow.GAME_SCREEN.getWidth())
+                else if (Position.X >= GameWindow.ScreenInfo.Width)
                 {
                     _onClearArea = false;
                     _onSpawnArea = true;
@@ -95,7 +96,7 @@ namespace JetScape.game.logics.entities
             }
         }
 
-        public void Update() => this.UpdateFlags();
+        public virtual void Update() => this.UpdateFlags();
 
         public override String ToString() => EntityType.ToString() + "[X:" + Position.X + "-Y:" + Position.Y + "]";
     }

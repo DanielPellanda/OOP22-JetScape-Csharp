@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 namespace JetScape.game.logics.entities.player
 {
     public interface IPlayer : IEntity
-    {
+    {        
+        // Added property for simulating keyboard input
+        bool SimulateInput { get; set; }
         bool HasDied { get; }
         int CurrentScore { get; }
         int CurrentCoinsCollected { get; }
@@ -32,9 +34,9 @@ namespace JetScape.game.logics.entities.player
             WALK = PlayerStatus.WALK, LAND = PlayerStatus.LAND, FALL = PlayerStatus.FALL,
             JUMP = PlayerStatus.JUMP, ZAPPED = PlayerStatus.ZAPPED, BURNED = PlayerStatus.BURNED, DEAD = PlayerStatus.DEAD
         };
-        private Status _value = PlayerStatus.WALK;
+        private readonly Status _value;
 
-        private PlayerStatus(int value) => this._value = (Status)value;
+        private PlayerStatus(int value) => this._value = (Status) value;
 
         public static implicit operator PlayerStatus(int value) => value >= 0 && value <= 6 ? new PlayerStatus(value) : new PlayerStatus(0);
 
@@ -54,7 +56,7 @@ namespace JetScape.game.logics.entities.player
 
         public override string ToString() => base.ToString().ToLower();
 
-        public static implicit operator int(PlayerStatus status) => (int)status._value;
+        public static implicit operator int(PlayerStatus status) => (int) status._value;
         public static bool operator ==(PlayerStatus left, PlayerStatus right) => Equals(left, right);
         public static bool operator !=(PlayerStatus left, PlayerStatus right) => !Equals(left, right);
 

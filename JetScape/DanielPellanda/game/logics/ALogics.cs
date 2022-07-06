@@ -8,21 +8,12 @@ using System.Threading.Tasks;
 namespace JetScape.game.logics
 {
     public abstract class ALogics : ILogics
-    {
-
-        private static int _frameTime;
-        private static int _difficultyLevel = 1;
-
-        private const int INCREASE_DIFF_PER_SCORE = 250;
-
-        private const double SPAWN_INTERVAL = 3.3;
-        private const double CLEAN_INTERVAL = 5.0;
-
-        public static int FrameTime { get => _frameTime; }
-        public static int DifficultyLevel { protected set => _difficultyLevel = value; get => _difficultyLevel; }
-        public static int IncreaseDiffPerScore { get => INCREASE_DIFF_PER_SCORE; }
-        protected static double SpawnInterval { get => SPAWN_INTERVAL; }
-        protected static double CleanInterval { get => CLEAN_INTERVAL; }
+    { 
+        public static int FrameTime { get; private set; }
+        public static int DifficultyLevel { protected set; get; } = 1;
+        public static int IncreaseDiffPerScore { get; } = 250;
+        internal static double SpawnInterval { get; } = 3.3;
+        internal static double CleanInterval { get; } = 5.0;
 
 
         /*       private SpeedHandler defaultEntitySpeed = new SpeedHandler(250.0, 15.0, 0);
@@ -30,7 +21,7 @@ namespace JetScape.game.logics
                private Map<EntityType, SpeedHandler> entitiesSpeed =
                        Map.of(EntityType.MISSILE, new SpeedHandler(500.0, 10.0, 5000.0));*/
 
-        protected static void UpdateTimer() => _frameTime++;
+        internal static void UpdateTimer() => FrameTime++;
 
         /*
         protected SpeedHandler getEntityMovementInfo(final EntityType type)

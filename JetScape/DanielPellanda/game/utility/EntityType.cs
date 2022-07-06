@@ -21,7 +21,7 @@ namespace JetScape.game.utility
         private enum Type { UNDEFINED = EntityType.UNDEFINED, PLAYER = EntityType.PLAYER, MISSILE = EntityType.MISSILE, 
             ZAPPER = EntityType.ZAPPER, ZAPPERBASE = EntityType.ZAPPERBASE, ZAPPERRAY = EntityType.ZAPPERRAY, 
             SHIELD = EntityType.SHIELD, TELEPORT = EntityType.TELEPORT, COIN = EntityType.COIN};
-        private Type _value = EntityType.UNDEFINED;
+        private readonly Type _value;
 
         public static IList<EntityType> ALL_ENTITY_TYPE = new List<EntityType>() {
             PLAYER, ZAPPER, MISSILE, SHIELD, TELEPORT, COIN };

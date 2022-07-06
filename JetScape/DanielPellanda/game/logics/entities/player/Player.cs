@@ -26,14 +26,10 @@ namespace JetScape.game.logics.entities.player
 
         private const double ANIMATION_SPEED = 7;
 
-        private const int X_POSITION = GameWindow.GAME_SCREEN.getTileSize() * X_RELATIVE_POSITION;
+        private static readonly int X_POSITION = (int) (GameWindow.ScreenInfo.TileSize * X_RELATIVE_POSITION);
 
         private bool _shieldProtected;
         private bool _invulnerable;
-
- 
-        private int _score;
-        private int _coins;
 
         private readonly double _jumpSpeed;
         private readonly double _fallSpeed;
@@ -48,8 +44,37 @@ namespace JetScape.game.logics.entities.player
 
         private PlayerStatus _status;
         private bool _statusChanged;
-
-        public PlayerDeath CauseOfDeath { get; private set; }
+        private PlayerStatus Status
+        {
+            get => _status;
+            set
+            {
+                _statusChanged = _status != value;
+                _status = value;
+            }
+        }
+        private bool StatusChanged { get; }
+        public bool SimulateInput { get; set; }
+        public int CurrentScore { get; private set; }
+        public int CurrentCoinsCollected { get; private set; }
+        public bool HasDied { get => Status == PlayerStatus.DEAD; }
+        public PlayerDeath CauseOfDeath
+        {
+            get => CauseOfDeath;
+            private set
+            {
+                switch (value)
+                {
+                    case PlayerDeath.BURNED:
+                    case PlayerDeath.ZAPPED:
+                        CauseOfDeath = value;
+                        break;
+                    default:
+                        CauseOfDeath = PlayerDeath.NONE;
+                        break;
+                }
+            }
+        }
 
         public Player(ILogics log) : base(log, new Point(X_POSITION, Y_LOW_LIMIT), EntityType.PLAYER)
         { 
@@ -73,147 +98,107 @@ namespace JetScape.game.logics.entities.player
                     //GameWindow.GAME_SOUND.play(Sound.SHIELD_DOWN);
                     return;
                 }
-                this.SetStatus(statusAfterHit);
+                this.Status = statusAfterHit;
                 //this.SetCauseOfDeath(statusAfterHit);
             }
         }
 
-        private void checkHit(IEntity entityHit)
+        private void CheckHit(IEntity entityHit)
         {
             switch (entityHit.EntityType)
             {
-                case MISSILE:
+                case EntityType.MISSILE:
                     if (!this._shieldProtected)
                     {
-                        GameWindow.GAME_SOUND.stop(Sound.JETPACK);
-                        GameWindow.GAME_SOUND.play(Sound.MISSILE);
+                        //GameWindow.GAME_SOUND.stop(Sound.JETPACK);
+                        //GameWindow.GAME_SOUND.play(Sound.MISSILE);
                     }
                     this.ObstacleHit(PlayerStatus.BURNED);
-                    entityHit.clean();
+                    entityHit.Clean();
                     break;
-                case ZAPPER:
+                case EntityType.ZAPPER:
                     if (!this._shieldProtected)
                     {
-                        GameWindow.GAME_SOUND.stop(Sound.JETPACK);
-                        GameWindow.GAME_SOUND.play(Sound.ZAPPED);
+                        //GameWindow.GAME_SOUND.stop(Sound.JETPACK);
+                        //GameWindow.GAME_SOUND.play(Sound.ZAPPED);
                     }
                     this.ObstacleHit(PlayerStatus.ZAPPED);
                     break;
-                case SHIELD:
+                case EntityType.SHIELD:
                     this._shieldProtected = true;
-                    entityHit.clean();
-                    GameWindow.GAME_SOUND.play(Sound.SHIELD_UP);
+                    entityHit.Clean();
+                    //GameWindow.GAME_SOUND.play(Sound.SHIELD_UP);
                     break;
-                case TELEPORT:
-                    this._score += TeleportInstance.getScoreIncrease();
-                    this.getCleaner().accept(t->t.isGenerableEntity(), e-> true);
-                    GameWindow.GAME_SOUND.play(Sound.TELEPORT);
+                case EntityType.TELEPORT:
+                    this.CurrentScore += ITeleport.ScoreIncrease;
+                    this.EntityCleaner.Invoke(t => t.IsGenerableEntity(), e => true);
+                    //GameWindow.GAME_SOUND.play(Sound.TELEPORT);
                     break;
-                case COIN:
-                    this._coins++;
-                    entityHit.clean();
-                    GameWindow.GAME_SOUND.play(Sound.COIN);
+                case EntityType.COIN:
+                    this.CurrentCoinsCollected++;
+                    entityHit.Clean();
+                    //GameWindow.GAME_SOUND.play(Sound.COIN);
                     break;
                 default:
                     break;
             }
         }
 
-        private void setStatus(final PlayerStatus newStatus)
-        {
-            this._statusChanged = this._status != newStatus;
-            this._status = newStatus;
-        }
-
-        private void jump()
+        private void Jump()
         {
             this._fallMultiplier = INITIAL_FALL_MULTIPLIER;
 
-            this.getPosition().setY(this.getPosition().getY() - this._jumpSpeed
-                    * this._jumpMultiplier > Y_TOP_LIMIT
-                    ? this.getPosition().getY() - this._jumpSpeed * this._jumpMultiplier
+            SetNewPosition(Position.X, Position.Y - _jumpSpeed * _jumpMultiplier > Y_TOP_LIMIT ?
+                    Position.Y - (int) (_jumpSpeed * _jumpMultiplier)
                     : Y_TOP_LIMIT);
-            this.setStatus(PlayerStatus.JUMP);
-            if (_statusChanged)
+            this.Status = PlayerStatus.JUMP;
+            if (StatusChanged)
             {
-                GameWindow.GAME_SOUND.playInLoop(Sound.JETPACK);
+                //GameWindow.GAME_SOUND.playInLoop(Sound.JETPACK);
             }
         }
 
-        private boolean fall()
+        private bool Fall()
         {
             this._jumpMultiplier = INITIAL_JUMP_MULTIPLIER;
 
-            if (this.getPosition().getY() + this._fallSpeed * this._fallMultiplier
+            if (Position.Y + _fallSpeed * _fallMultiplier
                     < Y_LOW_LIMIT)
             {
-                this.getPosition().setY(this.getPosition().getY()
-                        + this._fallSpeed * this._fallMultiplier);
+                SetNewPosition(Position.X, Position.Y + (int) (_fallSpeed * _fallMultiplier));
                 return true;
             }
-            this.getPosition().setY(Y_LOW_LIMIT);
+            SetNewPosition(Position.X, Y_LOW_LIMIT);
             return false;
         }
 
-        private void controlPlayer()
+        private void ControlPlayer()
         {
-            if (keyH.getCurrentInput(KeyEvent.VK_SPACE))
+            if (SimulateInput)
             {
-                this.jump();
+                this.Jump();
                 this._jumpMultiplier += JUMP_MULTIPLIER_INCREASE;
             }
             else if (this._status != PlayerStatus.WALK)
             {
-                this.setStatus(this.fall() ? PlayerStatus.FALL : PlayerStatus.LAND);
+                this.Status = this.Fall() ? PlayerStatus.FALL : PlayerStatus.LAND;
                 this._fallMultiplier += FALL_MULTIPLIER_INCREASE;
-                if (this._statusChanged)
+                if (StatusChanged)
                 {
-                    GameWindow.GAME_SOUND.stop(Sound.JETPACK);
+                   // GameWindow.GAME_SOUND.stop(Sound.JETPACK);
                 }
             }
         }
 
-        /**
-         * Updates the sprite that should be display during the animation.
-         */
-        private void updateSprite()
-        {
-            final int lastDeathSprite = 7;
-            final int lastLandSprite = 3;
-
-            if (this._statusChanged)
-            {
-                this._frameTime = 0;
-                this.spriteSwitcher = 0;
-                this._statusChanged = false;
-            }
-            else if (this._frameTime >= GameWindow.FPS_LIMIT / ANIMATION_SPEED)
-            {
-                if (this._status.isInDyingAnimation()
-                        && this.spriteSwitcher >= lastDeathSprite)
-                {
-                    this.setStatus(PlayerStatus.DEAD);
-                }
-                if (this._status == PlayerStatus.LAND
-                        && this.spriteSwitcher >= lastLandSprite)
-                {
-                    this.setStatus(PlayerStatus.WALK);
-                }
-                this._frameTime = 0;
-                this.spriteSwitcher++;
-            }
-            this._frameTime++;
-        }
-
-        private void updateInvulnerableTimer()
+        private void UpdateInvulnerableTimer()
         {
             if (this._invulnerable)
             {
                 if (this._invulnerableTimer == -1)
                 {
-                    this._invulnerableTimer = AbstractLogics.getFrameTime();
+                    this._invulnerableTimer = ALogics.FrameTime;
                 }
-                else if (AbstractLogics.getFrameTime() - this._invulnerableTimer
+                else if (ALogics.FrameTime - this._invulnerableTimer
                         >= INVINCIBILITY_TIMER * GameWindow.FPS_LIMIT)
                 {
                     this._invulnerable = false;
@@ -222,106 +207,45 @@ namespace JetScape.game.logics.entities.player
             }
         }
 
-        private void updateScore()
+        private void UpdateScore()
         {
             if (this._frameTime % 2 == 0)
             {
-                this._score++;
+                this.CurrentScore++;
             }
         }
 
-        /**
-         * {@inheritDoc}
-         */
-        public int getCurrentScore()
+        public override void Reset()
         {
-            return this._score;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public int getCurrentCoinsCollected()
-        {
-            return this._coins;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public boolean hasDied()
-        {
-            return this._status == PlayerStatus.DEAD;
-        }
-
-        private void setCauseOfDeath(final PlayerStatus deathCause)
-        {
-            switch (deathCause)
-            {
-                case BURNED:
-                    this.causeOfDeath = Player.PlayerDeath.BURNED;
-                    break;
-                case ZAPPED:
-                    this.causeOfDeath = Player.PlayerDeath.ZAPPED;
-                    break;
-                default:
-                    this.causeOfDeath = Player.PlayerDeath.NONE;
-                    break;
-            }
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public Player.PlayerDeath getCauseOfDeath()
-        {
-            return this.causeOfDeath;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-    public void reset()
-        {
-            super.reset();
-            this.setStatus(PlayerStatus.WALK);
-            this._score = 0;
-            this._coins = 0;
+            base.Reset();
+            this.Status = PlayerStatus.WALK;
+            this.CurrentScore = 0;
+            this.CurrentCoinsCollected = 0;
             this._frameTime = 0;
 
             this._invulnerable = false;
             this._shieldProtected = false;
         }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-    public void update()
+        public override void Update()
         {
-            super.update();
-            this.updateSprite();
-            this.updateInvulnerableTimer();
+            base.Update();
+            this.UpdateInvulnerableTimer();
 
-            if (!this._status.isInDyingAnimation())
+            if (!this.Status.IsInDyingAnimation())
             {
-                this.updateScore();
-                this.controlPlayer();
+                this.UpdateScore();
+                this.ControlPlayer();
             }
 
-            if (this.hasDied())
+            if (this.HasDied)
             {
-                this.fall();
+                this.Fall();
                 this._fallMultiplier += FALL_MULTIPLIER_INCREASE * 4;
             }
 
-            this.shieldPosition.setX(this.getPosition().getX() + GameWindow.GAME_SCREEN.getTileSize() / 16.0);
-            this.shieldPosition.setY(this.getPosition().getY());
-
-            this.getHitbox().updatePosition(this.getPosition());
-            this.hitChecker.interact(e->checkHit(e));
+            //this.getHitbox().updatePosition(this.getPosition());
+            //this.hitChecker.interact(e->checkHit(e));
         }
-
     }
 }

@@ -21,6 +21,8 @@ namespace JetScape.game.logics
 
         private GameState _gameState;
 
+        // Property added for testing porposes
+        public GameState GameState { get => _gameState; set => SetGameState(value); }
         public IDictionary<EntityType, ISet<IEntity>> Entities { get => _entities; }
 
         public Logics() : base()
@@ -122,10 +124,7 @@ namespace JetScape.game.logics
             }
         }
 
-        private void UpdateDifficulty()
-        {
-            DifficultyLevel = _playerEntity.CurrentScore() / IncreaseDiffPerScore + 1;
-        }
+        private void UpdateDifficulty() => DifficultyLevel = _playerEntity.CurrentScore / IncreaseDiffPerScore + 1;
 
         private void SetGameState(GameState gs)
         {
@@ -180,9 +179,9 @@ namespace JetScape.game.logics
                     _playerEntity.Update();
                     break;
                 case GameState.INGAME:
-                    if (_playerEntity.hasDied())
+                    if (_playerEntity.HasDied)
                     {
-                        SetGameState(GameState.ENDGAME);
+                        GameState = GameState.ENDGAME;
                         break;
                     }
                     UpdateDifficulty();
