@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace GiacomoAmadio.Collisions
+namespace JetScape.Collisions.Hitbox
 {
     public interface IHitbox
     {

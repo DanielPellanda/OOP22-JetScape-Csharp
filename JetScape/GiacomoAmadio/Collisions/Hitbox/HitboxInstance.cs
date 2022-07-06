@@ -3,9 +3,9 @@ using System.Drawing;
 using System.Collections.Immutable;
 
 
-namespace GiacomoAmadio.Collisions
+namespace JetScape.Collisions.Hitbox
 {
-    public abstract class AHitbox : IHitbox
+    public abstract class HitboxInstance : IHitbox
     {
         private const int SPRITE_DIMENSIONS = 32;
         private const int CURRENT_TILE_SIZE = 32;
@@ -13,7 +13,7 @@ namespace GiacomoAmadio.Collisions
         private Point _currentPos;
         private readonly ISet<Rectangle> _rectangles;
 
-        public AHitbox(Point startPos)
+        public HitboxInstance(Point startPos)
         {
             _hitboxes = new Dictionary<Rectangle, Point>();
             _currentPos = startPos;
@@ -22,14 +22,11 @@ namespace GiacomoAmadio.Collisions
 
         public void UpdatePosition(Point pos)
         {
-            var map = new Dictionary<Rectangle,Point>();
+            var map = new Dictionary<Rectangle, Point>();
             foreach (Rectangle rect in _hitboxes.Keys)
             {
-                map.Add(new Rectangle((pos.X + _hitboxes[rect].X),
-                    (pos.Y + _hitboxes[rect].Y),
-                    rect.Width,
-                    rect.Height),
-                    _hitboxes[rect]);
+                map.Add(new Rectangle(pos.X + _hitboxes[rect].X, pos.Y + _hitboxes[rect].Y,
+                    rect.Width, rect.Height), _hitboxes[rect]);
             }
             _hitboxes = map;
         }
