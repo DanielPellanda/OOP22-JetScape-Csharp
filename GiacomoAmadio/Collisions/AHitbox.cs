@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Collections.Immutable;
@@ -10,24 +9,24 @@ namespace GiacomoAmadio.Collisions
     {
         private const int SPRITE_DIMENSIONS = 32;
         private const int CURRENT_TILE_SIZE = 32;
-        private IDictionary<Rectangle, KeyValuePair<double, double>> _hitboxes;
-        private KeyValuePair<double, double> _currentPos;
+        private IDictionary<Rectangle, Point> _hitboxes;
+        private Point _currentPos;
         private readonly ISet<Rectangle> _rectangles;
 
-        public AHitbox(KeyValuePair<double, double> startPos)
+        public AHitbox(Point startPos)
         {
-            _hitboxes = new Dictionary<Rectangle, KeyValuePair<double, double>>();
+            _hitboxes = new Dictionary<Rectangle, Point>();
             _currentPos = startPos;
             _rectangles = new HashSet<Rectangle>();
         }
 
-        public void UpdatePosition(KeyValuePair<double, double> pos)
+        public void UpdatePosition(Point pos)
         {
-            var map = new Dictionary<Rectangle, KeyValuePair<double, double>>();
+            var map = new Dictionary<Rectangle,Point>();
             foreach (Rectangle rect in _hitboxes.Keys)
             {
-                map.Add(new Rectangle((int)(pos.Key + _hitboxes[rect].Key),
-                    (int)(pos.Value + _hitboxes[rect].Value),
+                map.Add(new Rectangle((pos.X + _hitboxes[rect].X),
+                    (pos.Y + _hitboxes[rect].Y),
                     rect.Width,
                     rect.Height),
                     _hitboxes[rect]);
@@ -39,12 +38,12 @@ namespace GiacomoAmadio.Collisions
 
         protected void addRectangle(double x, double y, double width, double height)
         {
-            int startingX = (int)(_currentPos.Key + scale(x));
-            int startingY = (int)(_currentPos.Value + scale(y));
+            int startingX = (int)(_currentPos.X + scale(x));
+            int startingY = (int)(_currentPos.Y + scale(y));
             int scaledWidth = (int)scale(width);
             int scaledHeight = (int)scale(height);
             _hitboxes.Add(new Rectangle(startingX, startingY, scaledWidth, scaledHeight),
-                    new KeyValuePair<double, double>(scale(x), scale(y)));
+                    new Point((int)scale(x), (int)scale(y)));
             _rectangles.UnionWith(_hitboxes.Keys);
         }
 

@@ -5,7 +5,7 @@ namespace GiacomoAmadio.Collisions
 {
     public interface IHitbox
     {
-        void UpdatePosition(KeyValuePair<double, double> pos);
+        void UpdatePosition(Point pos);
 
         ISet<Rectangle> GetRectangles();
     }
