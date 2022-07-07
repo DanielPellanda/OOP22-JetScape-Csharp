@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using JetScape.Sound;
+using System;
+using JetScape.Menu;
 
 namespace JetScape.game.frame
 {
@@ -13,6 +9,9 @@ namespace JetScape.game.frame
     {
         private const int SCREEN_WIDTH = 1920;
         private const int SCREEN_HEIGHT = 1080;
+
+        public static SoundManager GAME_MUSIC = new SoundManager(MenuOptions.MUSIC);
+        public static SoundManager GAME_SOUND = new SoundManager(MenuOptions.SOUND);
 
         public const int FPS_LIMIT = 60;
         public static GameScreen ScreenInfo { get; } = new GameScreen(SCREEN_HEIGHT, SCREEN_WIDTH);

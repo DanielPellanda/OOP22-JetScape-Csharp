@@ -9,9 +9,9 @@ namespace JetScape.Menu
 
     public class MenuHandler : IDisplayHandler
     {
-        private List<MenuOptions> _options;
+        private readonly List<MenuOptions> _options;
 
-        private SetGameState _gameState;
+        private readonly SetGameState _gameState;
 
         private int _cursor;
 
