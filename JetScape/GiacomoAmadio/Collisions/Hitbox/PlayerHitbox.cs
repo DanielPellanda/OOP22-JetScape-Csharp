@@ -15,8 +15,8 @@ namespace JetScape.Collisions.Hitbox
 
         public PlayerHitbox( Point startingPos) : base (startingPos)
         {
-            addRectangle(RECTANGLE_1X, RECTANGLE_1Y, RECTANGLE_1W, RECTANGLE_1H);
-            addRectangle(RECTANGLE_2X, RECTANGLE_2Y, RECTANGLE_2W, RECTANGLE_2H);
+            AddRectangle(RECTANGLE_1X, RECTANGLE_1Y, RECTANGLE_1W, RECTANGLE_1H);
+            AddRectangle(RECTANGLE_2X, RECTANGLE_2Y, RECTANGLE_2W, RECTANGLE_2H);
         }
     }
 }

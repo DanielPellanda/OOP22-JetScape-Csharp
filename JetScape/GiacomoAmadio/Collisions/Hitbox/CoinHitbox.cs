@@ -10,7 +10,7 @@ namespace JetScape.Collisions.Hitbox
         private const double RECTANGLE_H = 16;
         public CoinHitbox(Point startingPos) : base(startingPos)
         {
-            addRectangle(RECTANGLE_X, RECTANGLE_Y, RECTANGLE_W, RECTANGLE_H);
+            AddRectangle(RECTANGLE_X, RECTANGLE_Y, RECTANGLE_W, RECTANGLE_H);
         }
     }
 }

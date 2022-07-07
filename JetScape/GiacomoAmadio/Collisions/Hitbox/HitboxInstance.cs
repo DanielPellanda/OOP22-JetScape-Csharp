@@ -33,20 +33,20 @@ namespace JetScape.Collisions.Hitbox
 
         public ISet<Rectangle> GetRectangles() => _rectangles.ToImmutableHashSet();
 
-        protected void addRectangle(double x, double y, double width, double height)
+        protected void AddRectangle(double x, double y, double width, double height)
         {
-            int startingX = (int)(_currentPos.X + scale(x));
-            int startingY = (int)(_currentPos.Y + scale(y));
-            int scaledWidth = (int)scale(width);
-            int scaledHeight = (int)scale(height);
+            int startingX = (int)(_currentPos.X + Scale(x));
+            int startingY = (int)(_currentPos.Y + Scale(y));
+            int scaledWidth = (int)Scale(width);
+            int scaledHeight = (int)Scale(height);
             _hitboxes.Add(new Rectangle(startingX, startingY, scaledWidth, scaledHeight),
-                    new Point((int)scale(x), (int)scale(y)));
+                    new Point((int)Scale(x), (int)Scale(y)));
             _rectangles.UnionWith(_hitboxes.Keys);
         }
 
-        protected void addHitbox(IHitbox hitbox) => _rectangles.UnionWith(hitbox.GetRectangles());
+        protected void AddHitbox(IHitbox hitbox) => _rectangles.UnionWith(hitbox.GetRectangles());
 
-        private double scale(double x) => CURRENT_TILE_SIZE * (x / SPRITE_DIMENSIONS);
+        private double Scale(double x) => CURRENT_TILE_SIZE * (x / SPRITE_DIMENSIONS);
 
     }
 }

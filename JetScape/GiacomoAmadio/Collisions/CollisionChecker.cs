@@ -9,11 +9,11 @@ namespace JetScape.Collisions
 {
     public class CollisionsChecker
     {
-        private Dictionary<EntityType, ISet<Entity>> _entities;
+        private readonly Dictionary<EntityType, ISet<Entity>> _entities;
 
-        private Player _player;
+        private readonly Player _player;
 
-        private Queue<Entity> _collisions;
+        private readonly Queue<Entity> _collisions;
 
         public CollisionsChecker(Dictionary<EntityType, ISet<Entity>> entities, Player p)
         {
