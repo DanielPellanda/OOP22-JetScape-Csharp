@@ -12,7 +12,7 @@ namespace JetScape.Collisions
     {
         private CollisionsChecker _collisionC;
         private Logics _lh;
-        private Dictionary<EntityType, ISet<Entity>> _entities;
+        private IDictionary<EntityType, ISet<IEntity>> _entities;
         private Player _player;
 
         [SetUp]
@@ -20,7 +20,7 @@ namespace JetScape.Collisions
         {
             _lh = new Logics();
             _player = new Player(_lh);
-            _entities = new Dictionary<EntityType, ISet<Entity>>();
+            _entities = new Dictionary<EntityType, ISet<IEntity>>();
             _collisionC = new CollisionsChecker(_entities, _player);
         }
 
