@@ -30,9 +30,11 @@ namespace JetScape.Menu
                 {_MenuOption.MUSIC, GameState.SETTINGS},
                 {_MenuOption.SOUND, GameState.SETTINGS},
             };
-        readonly _MenuOption _current;
+        private readonly _MenuOption _current;
 
-        private MenuOptions(int val) => _current = (_MenuOption)val;
+        public MenuOptions(int val) => _current = (_MenuOption)val;
+
+        public static implicit operator int(MenuOptions option) => (int)option._current;
 
         public static implicit operator MenuOptions(int value)
         {
@@ -45,6 +47,6 @@ namespace JetScape.Menu
 
         public GameState getOptionsGS() => _Options[_current];
 
-        public string toString() => _current.ToString().ToLower();
+        public override string ToString() => _current.ToString().ToLower();
     }
 }

@@ -8,21 +8,21 @@ namespace JetScape.Collisions
     public delegate void Rection(Entity e);
     public class CollisionsHandler
     {
-        private  CollisionsChecker cChecker; 
+        private readonly CollisionsChecker _cChecker;
 
-    public CollisionsHandler(Dictionary<EntityType, ISet<Entity>> entities,  Player p)
+        public CollisionsHandler(Dictionary<EntityType, ISet<Entity>> entities, Player p)
         {
-            this.cChecker = new CollisionsChecker(entities, p);
+            _cChecker = new CollisionsChecker(entities, p);
         }
 
         public void interact( Rection action )
         {
-            cChecker.updateCollisions();
-            var entity = cChecker.NextToHandle();
+            _cChecker.updateCollisions();
+            var entity = _cChecker.NextToHandle();
             while (entity != null)
             {
                 action.Invoke(entity);
-                entity = cChecker.NextToHandle();
+                entity = _cChecker.NextToHandle();
             }
         }
     }
