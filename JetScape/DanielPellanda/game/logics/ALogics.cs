@@ -9,7 +9,7 @@ using JetScape.game.utility;
 
 namespace JetScape.game.logics
 {
-    public abstract class ALogics : ILogics
+    public abstract class ALogics
     {
         public static int FrameTime { get; private set; }
         public static int DifficultyLevel { protected set; get; } = 1;

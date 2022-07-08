@@ -11,7 +11,7 @@ namespace JetScape.game.logics
 {
     public interface ILogics
     {
-        GameState GameState  { get; }
+        GameState GameState  { get; set; }
 
         IDictionary<EntityType, ISet<IEntity>> Entities { get; }
 
