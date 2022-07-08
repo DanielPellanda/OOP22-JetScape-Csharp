@@ -6,6 +6,8 @@ using System.Text;
 using JetScape.game.utility;
 using JetScape.game.frame;
 
+using JetScape.Collisions.Hitbox;
+
 namespace JetScape.game.logics.entities
 {
     public class Entity : IEntity
@@ -18,18 +20,16 @@ namespace JetScape.game.logics.entities
 
         private readonly EntityType _entityTag;
 
-        /// FLAGS ///
         private bool _visible = true;
         private bool _onScreen;
         private bool _onClearArea;
         private bool _onSpawnArea = true;
 
-        //private Hitbox _hitbox;
         private readonly Cleaner _cleaner;
 
         public Point Position { get => _position; }
         public EntityType EntityType { get => _entityTag; }
-        //public Hitbox Hitbox { get => _hitbox; protected set => _hitbox = value; }
+        public IHitbox EntityHitbox { get; protected set; }
         protected Cleaner EntityCleaner { get => _cleaner; }
 
         public bool IsVisible { get => _visible; protected set => _visible = value; }
@@ -55,13 +55,13 @@ namespace JetScape.game.logics.entities
 
         public virtual void Reset()
         {
-            this.SetNewPosition(_startPos.X, _startPos.Y);
-            //this.hitbox.updatePosition(_position);
+            SetNewPosition(_startPos.X, _startPos.Y);
+            EntityHitbox.UpdatePosition(_position);
         }
 
         public virtual void Clean()
         {
-            this.Reset();
+            Reset();
             EntityCleaner.Invoke(t => EntityType == t, e => this == e);
         }
 

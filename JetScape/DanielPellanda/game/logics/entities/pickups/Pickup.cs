@@ -7,6 +7,8 @@ using JetScape.game.logics.interactions;
 using JetScape.game.logics.entities.player;
 using JetScape.game.utility;
 
+using JetScape.Collisions.Hitbox;
+
 namespace JetScape.game.logics.entities.pickups
 {
     public class Pickup : Entity, IPickup
@@ -20,7 +22,7 @@ namespace JetScape.game.logics.entities.pickups
             this.PlayerEntity = player;
             this.EntityMovement = speed.Copy();
 
-            //base.setHitbox(new PickableHitbox(position));
+            EntityHitbox = new PickableHitbox(position) ;
         }
 
     }

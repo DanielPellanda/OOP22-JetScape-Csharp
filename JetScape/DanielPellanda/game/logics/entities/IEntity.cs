@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 
+using JetScape.Collisions.Hitbox;
+
 namespace JetScape.game.logics.entities
 {
     public interface IEntity
@@ -15,7 +17,7 @@ namespace JetScape.game.logics.entities
         bool IsOnClearArea { get; }
         bool IsOnSpawnArea { get; }
         Point Position { get; }
-        //Hitbox getHitbox();
+        IHitbox EntityHitbox { get; }
         EntityType EntityType { get; }
 
         void Reset();

@@ -21,7 +21,6 @@ namespace JetScape.game.frame
         public class GameScreen
         {
             private const int HORIZONTAL_RATIO = 16;
-            private const int VERTICAL_RATIO = 9;
             private const double PROPORTION = 1.5;
 
             public Tuple<int, int> CurrentSize { get; private set; }

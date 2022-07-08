@@ -37,7 +37,7 @@ namespace JetScape.game.logics.entities.obstacles
                     EntityMovement.ApplyAcceleration();
                 }
             }
-            //this.getHitbox().updatePosition(Position);
+            EntityHitbox.UpdatePosition(Position);
         }
     }
 }

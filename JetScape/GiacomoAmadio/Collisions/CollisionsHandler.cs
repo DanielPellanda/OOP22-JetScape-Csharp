@@ -10,7 +10,7 @@ namespace JetScape.Collisions
     {
         private readonly CollisionsChecker _cChecker;
 
-        public CollisionsHandler(Dictionary<EntityType, ISet<Entity>> entities, Player p)
+        public CollisionsHandler(IDictionary<EntityType, ISet<IEntity>> entities, Player p)
         {
             _cChecker = new CollisionsChecker(entities, p);
         }

@@ -13,15 +13,9 @@ using JetScape.game.frame;
 namespace JetScape.game.logics.generator
 {
     public class Generator : IGenerator
-    {
-        //public ZapperRayFactory? CreateZRay { private get; set; } = null;
-        //public ZapperBaseFactory? CreateZBase { private get; set; } = null;
+    { 
         public MissileFactory CreateMissile { private get; set; } = null;
         public ShieldFactory CreateShield { private get; set; } = null;
-        //public TeleportFactory? CreateTeleport { private get; set; } = null;
-        //public CoinFactory? CreateCoins { private get; set; } = null;
-
-        //private readonly IDictionary<EntityType, IList<ISet<Entity>>> _tileSets = new Dictionary<EntityType, IList<ISet<Entity>>>();
         internal IDictionary<EntityType, ISet<IEntity>> Entities { get; private set; }
 
         private const int COINS_ODDS = 50;

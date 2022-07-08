@@ -9,6 +9,9 @@ using JetScape.game.logics;
 using JetScape.game.utility;
 using JetScape.game.frame;
 
+using JetScape.Collisions;
+using JetScape.Collisions.Hitbox;
+
 namespace JetScape.game.logics.entities.player
 {
     public class Player : Entity, IPlayer
@@ -40,7 +43,7 @@ namespace JetScape.game.logics.entities.player
         private int _frameTime;
         private int _invulnerableTimer = -1;
 
-        //private final CollisionsHandler hitChecker;
+        private CollisionsHandler _hitChecker;
 
         private PlayerStatus _status;
         private bool _statusChanged;
@@ -78,11 +81,11 @@ namespace JetScape.game.logics.entities.player
 
         public Player(ILogics log) : base(log, new Point(X_POSITION, Y_LOW_LIMIT), EntityType.PLAYER)
         { 
-            this._fallSpeed = BASE_FALL_SPEED / GameWindow.FPS_LIMIT;
-            this._jumpSpeed = BASE_JUMP_SPEED / GameWindow.FPS_LIMIT;
+            _fallSpeed = BASE_FALL_SPEED / GameWindow.FPS_LIMIT;
+            _jumpSpeed = BASE_JUMP_SPEED / GameWindow.FPS_LIMIT;
 
-            //this.setHitbox(new PlayerHitbox(this.getPosition()));
-            //this.hitChecker = new CollisionsHandler(l.getEntities(), this);
+            EntityHitbox = new PlayerHitbox(Position);
+            _hitChecker = new CollisionsHandler(log.Entities, this);
 
             this._status = PlayerStatus.WALK;
         }
@@ -116,29 +119,11 @@ namespace JetScape.game.logics.entities.player
                     this.ObstacleHit(PlayerStatus.BURNED);
                     entityHit.Clean();
                     break;
-                /*case EntityType.ZAPPER:
-                    if (!this._shieldProtected)
-                    {
-                        //GameWindow.GAME_SOUND.stop(Sound.JETPACK);
-                        //GameWindow.GAME_SOUND.play(Sound.ZAPPED);
-                    }
-                    this.ObstacleHit(PlayerStatus.ZAPPED);
-                    break;*/
                 case EntityType.SHIELD:
                     this._shieldProtected = true;
                     entityHit.Clean();
                     //GameWindow.GAME_SOUND.play(Sound.SHIELD_UP);
                     break;
-                /*case EntityType.TELEPORT:
-                    this.CurrentScore += ITeleport.ScoreIncrease;
-                    this.EntityCleaner.Invoke(t => t.IsGenerableEntity(), e => true);
-                    //GameWindow.GAME_SOUND.play(Sound.TELEPORT);
-                    break;
-                case EntityType.COIN:
-                    this.CurrentCoinsCollected++;
-                    entityHit.Clean();
-                    //GameWindow.GAME_SOUND.play(Sound.COIN);
-                    break;*/
                 default:
                     break;
             }
@@ -244,8 +229,8 @@ namespace JetScape.game.logics.entities.player
                 this._fallMultiplier += FALL_MULTIPLIER_INCREASE * 4;
             }
 
-            //this.getHitbox().updatePosition(this.getPosition());
-            //this.hitChecker.interact(e->checkHit(e));
+            EntityHitbox.UpdatePosition(Position);
+            _hitChecker.interact(e => CheckHit(e));
         }
     }
 }

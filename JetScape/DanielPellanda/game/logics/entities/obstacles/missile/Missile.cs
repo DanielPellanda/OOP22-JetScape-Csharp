@@ -7,6 +7,7 @@ using JetScape.game.frame;
 using JetScape.game.logics.interactions;
 using JetScape.game.logics.entities.player;
 using JetScape.game.utility;
+using JetScape.Collisions.Hitbox;
 
 namespace JetScape.game.logics.entities.obstacles.missile
 {
@@ -35,7 +36,7 @@ namespace JetScape.game.logics.entities.obstacles.missile
             _ySpeed = _yStartSpeed;
             playerPosition = player.Position;
 
-            //this.setHitbox(new MissileHitbox(pos));
+            EntityHitbox = new MissileHitbox(pos);
         }
 
         private void UpdateFrameTime()

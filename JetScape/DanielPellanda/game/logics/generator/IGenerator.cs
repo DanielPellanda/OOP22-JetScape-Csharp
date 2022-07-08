@@ -10,13 +10,9 @@ using JetScape.game.logics;
 namespace JetScape.game.logics.generator
 {
     public interface IGenerator
-    {
-        //ZapperRayFactory CreateZRay { set; };
-        //ZapperBaseFactory CreateZBase { set; };
+    { 
         MissileFactory CreateMissile { set; }
         ShieldFactory CreateShield { set; }
-        //TeleportFactory CreateTeleport { set; }
-        //CoinFactory CreateCoins { set; }
 
         bool IsRunning { get; }
         bool IsWaiting { get; }

@@ -9,13 +9,13 @@ namespace JetScape.Collisions
 {
     public class CollisionsChecker
     {
-        private readonly Dictionary<EntityType, ISet<Entity>> _entities;
+        private readonly IDictionary<EntityType, ISet<IEntity>> _entities;
 
         private readonly Player _player;
 
         private readonly Queue<Entity> _collisions;
 
-        public CollisionsChecker(Dictionary<EntityType, ISet<Entity>> entities, Player p)
+        public CollisionsChecker(IDictionary<EntityType, ISet<IEntity>> entities, Player p)
         {
             _entities = entities;
             _collisions = new Queue<Entity>();
@@ -31,13 +31,13 @@ namespace JetScape.Collisions
 
         public void updateCollisions()
         {
-            foreach ( KeyValuePair<EntityType, ISet<Entity>> entry in _entities )
+            foreach ( KeyValuePair<EntityType, ISet<IEntity>> entry in _entities )
             {
                 if (entry.Key != EntityType.PLAYER)
                 {
                     foreach (Entity entity in entry.Value)
                     {
-                        if (collides(entity.GetHitbox()))
+                        if (collides(entity.EntityHitbox))
                         {
                             _collisions.Enqueue(entity);
                         }
@@ -47,7 +47,7 @@ namespace JetScape.Collisions
         }
         private bool collides(IHitbox entity)
         {
-            foreach (Rectangle player in _player.GetHitbox().GetRectangles())
+            foreach (Rectangle player in _player.EntityHitbox.GetRectangles())
             {
                 foreach (Rectangle target in entity.GetRectangles())
                 {
