@@ -1,8 +1,9 @@
 ﻿using System.IO;
 using System.Collections.Generic;
 using System.Text.Json;
+using JetScape.Menu;
 
-namespace JetScape.Menu
+namespace JetScape.Sound
 {
     public class SettingsManager
     {

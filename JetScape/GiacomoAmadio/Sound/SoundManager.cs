@@ -9,7 +9,7 @@ namespace JetScape.Sound
         private const int MIN_LEVEL = 0;
         private SettingsManager _sManager;
 
-        private int VolumeLevel { get; set; }
+        public int VolumeLevel { get; private set; }
 
         public SoundManager( MenuOptions audioSetting)
         {

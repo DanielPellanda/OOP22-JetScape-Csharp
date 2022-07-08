@@ -37,7 +37,7 @@ namespace JetScape.Collisions
                 {
                     foreach (Entity entity in entry.Value)
                     {
-                        if (collides(entity.))
+                        if (collides(entity.GetHitbox()))
                         {
                             _collisions.Enqueue(entity);
                         }
@@ -47,7 +47,7 @@ namespace JetScape.Collisions
         }
         private bool collides(IHitbox entity)
         {
-            foreach (Rectangle player in _player.GetRectangles())
+            foreach (Rectangle player in _player.GetHitbox().GetRectangles())
             {
                 foreach (Rectangle target in entity.GetRectangles())
                 {

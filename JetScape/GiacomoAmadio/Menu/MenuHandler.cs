@@ -17,12 +17,15 @@ namespace JetScape.Menu
 
         private MenuOptions _selectedOption;
 
-        public MenuHandler(List<MenuOptions> options, SetGameState setter)
+        public MenuHandler(List<MenuOptions> options)
         {
             _cursor = 0;
             _options = options;
-            _gameState = setter;
             UpdateSelectedOption();
+        }
+        public MenuHandler(List<MenuOptions> options, SetGameState setter) : this(options)
+        {
+            _gameState = setter;
         }
 
         public MenuOptions GetSelectedOption()
