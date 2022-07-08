@@ -116,20 +116,20 @@ namespace JetScape.game.logics.entities.player
                     this.ObstacleHit(PlayerStatus.BURNED);
                     entityHit.Clean();
                     break;
-                case EntityType.ZAPPER:
+                /*case EntityType.ZAPPER:
                     if (!this._shieldProtected)
                     {
                         //GameWindow.GAME_SOUND.stop(Sound.JETPACK);
                         //GameWindow.GAME_SOUND.play(Sound.ZAPPED);
                     }
                     this.ObstacleHit(PlayerStatus.ZAPPED);
-                    break;
+                    break;*/
                 case EntityType.SHIELD:
                     this._shieldProtected = true;
                     entityHit.Clean();
                     //GameWindow.GAME_SOUND.play(Sound.SHIELD_UP);
                     break;
-                case EntityType.TELEPORT:
+                /*case EntityType.TELEPORT:
                     this.CurrentScore += ITeleport.ScoreIncrease;
                     this.EntityCleaner.Invoke(t => t.IsGenerableEntity(), e => true);
                     //GameWindow.GAME_SOUND.play(Sound.TELEPORT);
@@ -138,7 +138,7 @@ namespace JetScape.game.logics.entities.player
                     this.CurrentCoinsCollected++;
                     entityHit.Clean();
                     //GameWindow.GAME_SOUND.play(Sound.COIN);
-                    break;
+                    break;*/
                 default:
                     break;
             }

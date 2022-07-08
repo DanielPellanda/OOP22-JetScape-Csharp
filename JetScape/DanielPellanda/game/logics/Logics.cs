@@ -8,16 +8,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
+
+using JetScape.game.logics.entities.obstacles;
+using JetScape.game.logics.entities.obstacles.missile;
+using JetScape.game.logics.entities.pickups;
+using JetScape.game.logics.entities.pickups.shield;
 
 namespace JetScape.game.logics
 {
     public delegate void Cleaner(Predicate<EntityType> typeCondition, Predicate<IEntity> entityCondition);
+    public delegate IObstacle MissileFactory(Point position);
+    public delegate IPickup ShieldFactory(Point position);
 
     public class Logics : ALogics, ILogics
     {
         private readonly IDictionary<EntityType, ISet<IEntity>> _entities = new Dictionary<EntityType, ISet<IEntity>>();
         private readonly IPlayer _playerEntity;
-        private IGenerator _spawner;
+        private readonly IGenerator _spawner;
 
         private GameState _gameState;
 
@@ -36,77 +44,45 @@ namespace JetScape.game.logics
             _playerEntity = new Player(this);
 
             _spawner = new Generator(Entities, SpawnInterval);
-            //this.initializeSpawner();
+            this.InitializeSpawner();
         }
 
-        /*
-        private void initializeSpawner()
+        
+        private void InitializeSpawner()
         {
 
-            this.spawner.setMissileCreator(p-> new MissileInstance(this, p,
-                    this.playerEntity, super.getEntityMovementInfo(EntityType.MISSILE)));
-            this.spawner.setZapperBaseCreator(p-> new ZapperBaseInstance(this, p,
-                    super.getEntityMovementInfo(EntityType.ZAPPERBASE)));
-            this.spawner.setZapperRayCreator((b, p)-> new ZapperRayInstance(this, p, b.getX(), b.getY()));
-            this.spawner.setShieldCreator(p-> new ShieldInstance(this, p,
-                    this.playerEntity, super.getEntityMovementInfo(EntityType.SHIELD)));
-            this.spawner.setTeleportCreator(p-> new TeleportInstance(this, p,
-                    this.playerEntity, super.getEntityMovementInfo(EntityType.TELEPORT)));
-            this.spawner.setCoinCreator(p-> new CoinInstance(this, p,
-                    this.playerEntity, super.getEntityMovementInfo(EntityType.COIN)));
+            _spawner.CreateMissile = p => new Missile(this, p,
+                    _playerEntity, GetEntityMovementInfo(EntityType.MISSILE));
+            _spawner.CreateShield = p => new Shield(this, p,
+                    _playerEntity, GetEntityMovementInfo(EntityType.SHIELD));
 
-            try
-            {
-                this.spawner.initialize();
-            }
-            catch (FileNotFoundException e)
-            {
-                JOptionPane.showMessageDialog((Component)GameHandler.GAME_WINDOW,
-                        "Tiles information file cannot be found.\n\nDetails:\n"
-                        + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                e.printStackTrace();
-            }
-            catch (JsonException e)
-            {
-                JOptionPane.showMessageDialog((Component)GameHandler.GAME_WINDOW,
-                        "An error occured while trying to load tiles.\n\nDetails:\n"
-                        + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                e.printStackTrace();
-            }
-            catch (FormatException e)
-            {
-                JOptionPane.showMessageDialog((Component)GameHandler.GAME_WINDOW,
-                        "Tiles information file has an incorrect format.\n\nDetails:\n"
-                        + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                e.printStackTrace();
-            }
-        }*/
+            _spawner.Initialize();
+        }
 
         public override Cleaner GetEntitiesCleaner()
         {
             return delegate (Predicate<EntityType> typeCondition, Predicate<IEntity> entityCondition)
             {
-                _spawner.Mutex.WaitOne();
-
-                var typesToClean =
-                    from s in _entities
-                    where typeCondition.Invoke(s.Key)
-                    select s.Value;
-                foreach (ISet<IEntity> s in typesToClean)
+                lock (Entities)
                 {
-                    var entitiesToClean =
-                        from e in s
-                        where entityCondition.Invoke(e)
-                        select e;
-                    foreach (IEntity e in entitiesToClean)
+                    var typesToClean =
+                        from s in _entities
+                        where typeCondition.Invoke(s.Key)
+                        select s.Value;
+                    foreach (ISet<IEntity> s in typesToClean)
                     {
-                        e.Reset();
-                        s.Remove(e);
+                        var entitiesToClean =
+                            from e in s
+                            where entityCondition.Invoke(e)
+                            select e;
+                        foreach (IEntity e in entitiesToClean)
+                        {
+                            e.Reset();
+                            s.Remove(e);
+                        }
                     }
+                    //GameWindow.GAME_DEBUGGER.printLog(Debugger.Option.LOG_CLEAN, "cleaned::" + e.toString()
                 }
-                //GameWindow.GAME_DEBUGGER.printLog(Debugger.Option.LOG_CLEAN, "cleaned::" + e.toString()
-
-                _spawner.Mutex.ReleaseMutex();
             };
         }
 
@@ -187,15 +163,16 @@ namespace JetScape.game.logics
                     UpdateDifficulty();
                     UpdateCleaner();
 
-                    _spawner.Mutex.WaitOne();
-                    foreach (ISet<IEntity> sets in _entities.Keys)
+                    lock (Entities)
                     {
-                        foreach (IEntity entity in sets)
+                        foreach (ISet<IEntity> sets in _entities.Keys)
                         {
-                            entity.Update();
+                            foreach (IEntity entity in sets)
+                            {
+                                entity.Update();
+                            }
                         }
                     }
-                    _spawner.Mutex.ReleaseMutex();
                     break;
                 default:
                     break;

@@ -17,6 +17,8 @@ namespace JetScape.game.frame
         public const int FPS_LIMIT = 60;
         public static GameScreen ScreenInfo { get; } = new GameScreen(SCREEN_HEIGHT, SCREEN_WIDTH);
 
+        public static long NanoTimeFromEpoch() => (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).Ticks * 100;
+
         public class GameScreen
         {
             private const int HORIZONTAL_RATIO = 16;

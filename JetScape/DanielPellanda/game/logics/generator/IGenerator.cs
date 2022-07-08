@@ -5,25 +5,24 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 
+using JetScape.game.logics;
+
 namespace JetScape.game.logics.generator
 {
     public interface IGenerator
     {
-        /*
-        void setZapperRayCreator(BiFunction<Pair<ZapperBase, ZapperBase>, Pair<Double, Double>, ZapperRay> zapperr);
-        void setZapperBaseCreator(Function<Pair<Double, Double>, ZapperBase> zapperb);
-        void setMissileCreator(Function<Pair<Double, Double>, Missile> missile);
-        void setShieldCreator(Function<Pair<Double, Double>, Shield> shield);
-        void setTeleportCreator(Function<Pair<Double, Double>, Teleport> teleport);
-        void setCoinCreator(Function<Pair<Double, Double>, Coin> coin);
-        */
+        //ZapperRayFactory CreateZRay { set; };
+        //ZapperBaseFactory CreateZBase { set; };
+        MissileFactory CreateMissile { set; }
+        ShieldFactory CreateShield { set; }
+        //TeleportFactory CreateTeleport { set; }
+        //CoinFactory CreateCoins { set; }
 
-        bool IsRunning();
-        bool IsWaiting();
+        bool IsRunning { get; }
+        bool IsWaiting { get; }
 
-        //void initialize() throws FileNotFoundException, JsonException, FormatException;
+        void Initialize();
 
-        Mutex Mutex { get; }
         void Start();
         void Terminate();
         void Stop();
