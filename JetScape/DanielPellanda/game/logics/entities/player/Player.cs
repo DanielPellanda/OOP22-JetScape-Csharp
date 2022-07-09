@@ -80,7 +80,7 @@ namespace JetScape.game.logics.entities.player
         }
 
         public Player(ILogics log) : base(log, new Point(X_POSITION, Y_LOW_LIMIT), EntityType.PLAYER)
-        { 
+        {
             _fallSpeed = BASE_FALL_SPEED / GameWindow.FPS_LIMIT;
             _jumpSpeed = BASE_JUMP_SPEED / GameWindow.FPS_LIMIT;
 

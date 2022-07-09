@@ -51,20 +51,19 @@ namespace JetScape.game.logics.generator
             {
                 if (CreateShield == null) return;
 
-                Entities.Add(EntityType.SHIELD, new HashSet<IEntity>() { CreateShield.Invoke(new Point(GameWindow.ScreenInfo.Width, GameWindow.ScreenInfo.Height / 2)) });
+                Entities[EntityType.SHIELD].Add(CreateShield.Invoke(new Point(GameWindow.ScreenInfo.Width, GameWindow.ScreenInfo.Height / 2)));
             }
             else
             {
                 if (CreateMissile == null) return;
 
-                Entities.Add(EntityType.MISSILE, new HashSet<IEntity>() { CreateMissile.Invoke(new Point(GameWindow.ScreenInfo.Width, GameWindow.ScreenInfo.Height / 2)) });
+                Entities[EntityType.MISSILE].Add(CreateMissile.Invoke(new Point(GameWindow.ScreenInfo.Width, GameWindow.ScreenInfo.Height / 2)));
             }
         }
 
         public void Initialize() 
         {
             GeneratorThread.GeneratorToExecute = this;
-            GeneratorThread.Start();
         }
 
         public void Start() => GeneratorThread.Start();
@@ -85,11 +84,11 @@ namespace JetScape.game.logics.generator
         private static long _remainingTimeToSleep;
         private static long _sleepTimeLeft;
 
-        private static Thread TGenerator { get; set; }
+        private static Thread TGenerator { get; } = new Thread(new ThreadStart(Run));
         internal static Generator GeneratorToExecute { get; set; } = null;
 
-        public static bool IsRunning { get; internal set; }
-        public static bool IsWaiting { get; internal set; }
+        public static bool IsRunning { get; internal set; } = false;
+        public static bool IsWaiting { get; internal set; } = false;
 
         public static void Start()
         {

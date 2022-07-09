@@ -6,6 +6,7 @@ using System.Drawing;
 using JetScape.game.logics.interactions;
 using JetScape.game.logics.entities.player;
 using JetScape.game.utility;
+using JetScape.game.frame;
 
 using JetScape.Collisions.Hitbox;
 
@@ -22,8 +23,24 @@ namespace JetScape.game.logics.entities.pickups
             this.PlayerEntity = player;
             this.EntityMovement = speed.Copy();
 
-            EntityHitbox = new PickableHitbox(position) ;
+            EntityHitbox = new PickableHitbox(position);
         }
 
+        public override void Reset()
+        {
+            base.Reset();
+            EntityMovement.ResetSpeed();
+        }
+
+        public override void Update()
+        {
+            base.Update();
+
+            if (Position.X > -GameWindow.ScreenInfo.TileSize * 2)
+            {
+                SetNewPosition(Position.X - (int)(EntityMovement.Speed / GameWindow.FPS_LIMIT), Position.Y);
+            }
+            EntityHitbox.UpdatePosition(Position);
+        }
     }
 }

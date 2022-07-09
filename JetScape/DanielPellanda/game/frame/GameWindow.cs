@@ -30,8 +30,8 @@ namespace JetScape.game.frame
 
             public GameScreen(int height, int width)
             {
-                CurrentSize = new Tuple<int, int>(height, width);
-                TileSize = (int) (Width / PROPORTION) / HORIZONTAL_RATIO;
+                CurrentSize = new Tuple<int, int>((int) (height / PROPORTION), (int) (width / PROPORTION));
+                TileSize = (int) Width / HORIZONTAL_RATIO;
             }
         }
     }

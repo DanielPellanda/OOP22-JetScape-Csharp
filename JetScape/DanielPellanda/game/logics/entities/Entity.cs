@@ -37,7 +37,7 @@ namespace JetScape.game.logics.entities
         public bool IsOnClearArea { get => _onClearArea; private set => _onClearArea = value; }
         public bool IsOnSpawnArea { get => _onSpawnArea; private set => _onSpawnArea = value; }
 
-        protected Entity(ILogics l, Point position, EntityType type)
+        protected Entity(ILogics l, Point position, int type)
         {
             this._cleaner = l.GetEntitiesCleaner();
             this._position = position;

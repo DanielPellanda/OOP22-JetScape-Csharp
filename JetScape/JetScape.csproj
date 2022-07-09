@@ -14,9 +14,4 @@
     <PackageReference Include="coverlet.collector" Version="3.1.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DanielPellanda\test\logics\entities\" />
-    <Folder Include="DanielPellanda\test\logics\generator\" />
-  </ItemGroup>
-
 </Project>

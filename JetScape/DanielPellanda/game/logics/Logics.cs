@@ -71,10 +71,7 @@ namespace JetScape.game.logics
                         select s.Value;
                     foreach (ISet<IEntity> s in typesToClean)
                     {
-                        var entitiesToClean =
-                            from e in s
-                            where entityCondition.Invoke(e)
-                            select e;
+                        IList<IEntity> entitiesToClean = new List<IEntity>(s.Where<IEntity>(e => entityCondition.Invoke(e)));
                         foreach (IEntity e in entitiesToClean)
                         {
                             e.Reset();
@@ -165,7 +162,7 @@ namespace JetScape.game.logics
 
                     lock (Entities)
                     {
-                        foreach (ISet<IEntity> sets in _entities.Keys)
+                        foreach (ISet<IEntity> sets in _entities.Values)
                         {
                             foreach (IEntity entity in sets)
                             {
