@@ -41,6 +41,7 @@ namespace JetScape.Sound
                 new JsonSerializerOptions() { WriteIndented = true });
             StreamWriter wrt = new StreamWriter(filename);
             wrt.Write(str);
+            wrt.Close();
         }
 
         private void Update()
@@ -53,12 +54,13 @@ namespace JetScape.Sound
 
             StreamReader reader = new StreamReader(filename);
             _setting = JsonSerializer.Deserialize<Dictionary<string, int>>(reader.ReadToEnd());
+            reader.Close();
         }
 
         private void BuildDefault() 
         {
-            _setting.Add(MenuOptions.MUSIC.ToString(), DEFAULT_SETTING);
-            _setting.Add(MenuOptions.SOUND.ToString(), DEFAULT_SETTING);
+            _setting.Add(new MenuOptions(MenuOptions.MUSIC).ToString(), DEFAULT_SETTING);
+            _setting.Add(new MenuOptions(MenuOptions.SOUND).ToString(), DEFAULT_SETTING);
         }
     }
 }
