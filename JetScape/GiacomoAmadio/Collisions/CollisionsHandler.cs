@@ -5,7 +5,7 @@ using JetScape.game.logics.entities.player;
 
 namespace JetScape.Collisions
 {
-    public delegate void Rection(Entity e);
+    public delegate void Reaction(Entity e);
     public class CollisionsHandler
     {
         private readonly CollisionsChecker _cChecker;
@@ -15,7 +15,7 @@ namespace JetScape.Collisions
             _cChecker = new CollisionsChecker(entities, p);
         }
 
-        public void interact( Rection action )
+        public void interact( Reaction action )
         {
             _cChecker.updateCollisions();
             var entity = _cChecker.NextToHandle();

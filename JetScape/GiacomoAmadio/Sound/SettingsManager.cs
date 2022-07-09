@@ -57,8 +57,8 @@ namespace JetScape.Sound
 
         private void BuildDefault() 
         {
-            _setting.Add(new MenuOptions(MenuOptions.MUSIC).ToString(), DEFAULT_SETTING);
-            _setting.Add(new MenuOptions(MenuOptions.SOUND).ToString(), DEFAULT_SETTING);
+            _setting.Add(MenuOptions.MUSIC.ToString(), DEFAULT_SETTING);
+            _setting.Add(MenuOptions.SOUND.ToString(), DEFAULT_SETTING);
         }
     }
 }
