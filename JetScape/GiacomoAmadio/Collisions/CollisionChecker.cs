@@ -24,12 +24,11 @@ namespace JetScape.Collisions
 
         public Entity NextToHandle() 
         {
-            Entity entity = null;
-            _collisions.TryDequeue(out entity);
+            _collisions.TryDequeue(out Entity entity);
             return entity;
         }
 
-        public void updateCollisions()
+        public void UpdateCollisions()
         {
             foreach ( KeyValuePair<EntityType, ISet<IEntity>> entry in _entities )
             {
@@ -37,7 +36,7 @@ namespace JetScape.Collisions
                 {
                     foreach (Entity entity in entry.Value)
                     {
-                        if (collides(entity.EntityHitbox))
+                        if (Collides(entity.EntityHitbox))
                         {
                             _collisions.Enqueue(entity);
                         }
@@ -45,7 +44,7 @@ namespace JetScape.Collisions
                 }
             }
         }
-        private bool collides(IHitbox entity)
+        private bool Collides(IHitbox entity)
         {
             foreach (Rectangle player in _player.EntityHitbox.GetRectangles())
             {

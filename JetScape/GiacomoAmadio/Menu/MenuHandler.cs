@@ -34,7 +34,7 @@ namespace JetScape.Menu
             return _selectedOption;
         }
 
-        public void Select() => _gameState(GetSelectedOption().getOptionsGS());
+        public void Select() => _gameState(GetSelectedOption().GetOptionsGS());
 
         public void GoUp()
         {

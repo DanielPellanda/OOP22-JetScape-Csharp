@@ -15,9 +15,9 @@ namespace JetScape.Collisions
             _cChecker = new CollisionsChecker(entities, p);
         }
 
-        public void interact( Reaction action )
+        public void Interact( Reaction action )
         {
-            _cChecker.updateCollisions();
+            _cChecker.UpdateCollisions();
             var entity = _cChecker.NextToHandle();
             while (entity != null)
             {

@@ -16,29 +16,29 @@ namespace JetScape.Sound
         public const int MISSILE_WARNING = 9;
         public const int NONE = 10;
 
-        private enum _Sound
+        private enum SoundType
         {
             MAIN_THEME, MENU_SELECTION, ZAPPED, COIN, SHIELD_UP,
             SHIELD_DOWN, TELEPORT, MISSILE, JETPACK, MISSILE_WARNING, NONE
         }
 
-        private Dictionary<_Sound, string> _Sounds =
-            new Dictionary<_Sound, string>() {
-                {_Sound.MAIN_THEME, "MainTheme.wav"},
-                {_Sound.MENU_SELECTION, "MenuSelect.wav"},
-                {_Sound.ZAPPED, "Zapped.wav"},
-                {_Sound.COIN, "Coin.wav"},
-                {_Sound.SHIELD_UP, "ShieldUp.wav"},
-                {_Sound.SHIELD_DOWN, "ShieldDown.wav"},
-                {_Sound.TELEPORT, "Teleport.wav"},
-                {_Sound.MISSILE, "Missile.wav"},
-                {_Sound.JETPACK, "Jetpack.wav"},
-                {_Sound.MISSILE_WARNING, "MissileWarning.wav"}
+        private readonly Dictionary<SoundType, string> _Sounds =
+            new Dictionary<SoundType, string>() {
+                {SoundType.MAIN_THEME, "MainTheme.wav"},
+                {SoundType.MENU_SELECTION, "MenuSelect.wav"},
+                {SoundType.ZAPPED, "Zapped.wav"},
+                {SoundType.COIN, "Coin.wav"},
+                {SoundType.SHIELD_UP, "ShieldUp.wav"},
+                {SoundType.SHIELD_DOWN, "ShieldDown.wav"},
+                {SoundType.TELEPORT, "Teleport.wav"},
+                {SoundType.MISSILE, "Missile.wav"},
+                {SoundType.JETPACK, "Jetpack.wav"},
+                {SoundType.MISSILE_WARNING, "MissileWarning.wav"}
             };
 
-        readonly _Sound _current;
+        readonly SoundType _current;
 
-        private Sound(int val) => _current = (_Sound)val;
+        private Sound(int val) => _current = (SoundType)val;
 
         public static implicit operator Sound(int value)
         {

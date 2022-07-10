@@ -13,26 +13,26 @@ namespace JetScape.Sound
 
         private const string filename = "settings.json";
 
-        public MenuOptions _option { get; private set; }
+        public MenuOptions Option { get; private set; }
 
         public SettingsManager(MenuOptions option)
         {
             _setting = new Dictionary<string, int>();
-            _option = option;
+            Option = option;
         }
 
         public void WriteSetting(int value)
         {
             Update();
-            _setting.Remove(_option.ToString());
-            _setting.Add(_option.ToString(), value);
+            _setting.Remove(Option.ToString());
+            _setting.Add(Option.ToString(), value);
             Write();
         }
 
         public int GetSettingValue()
         {
             Update();
-            return _setting.GetValueOrDefault(_option.ToString());
+            return _setting.GetValueOrDefault(Option.ToString());
         }
 
         private void Write()

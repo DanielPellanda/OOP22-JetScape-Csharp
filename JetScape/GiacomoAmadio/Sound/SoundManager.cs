@@ -7,7 +7,7 @@ namespace JetScape.Sound
     {
         private const int MAX_LEVEL = 4;
         private const int MIN_LEVEL = 0;
-        private SettingsManager _sManager;
+        private readonly SettingsManager _sManager;
 
         public int VolumeLevel { get; private set; }
 

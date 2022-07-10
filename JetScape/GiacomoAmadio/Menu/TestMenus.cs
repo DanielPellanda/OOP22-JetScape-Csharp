@@ -13,12 +13,14 @@ namespace JetScape.Menu
         [SetUp]
         public void Setup()
         {
-            _options = new List<MenuOptions>();
-            _options.Add(new MenuOptions(MenuOptions.MENU));
-            _options.Add(new MenuOptions(MenuOptions.START)); 
-            _options.Add(new MenuOptions(MenuOptions.SETTINGS));
-            _options.Add(new MenuOptions(MenuOptions.RECORDS));
-            _options.Add(new MenuOptions(MenuOptions.RETRY));
+            _options = new List<MenuOptions>
+            {
+                new MenuOptions(MenuOptions.MENU),
+                new MenuOptions(MenuOptions.START),
+                new MenuOptions(MenuOptions.SETTINGS),
+                new MenuOptions(MenuOptions.RECORDS),
+                new MenuOptions(MenuOptions.RETRY)
+            };
             _menuHandler = new MenuHandler(_options);
         }
 
@@ -29,12 +31,16 @@ namespace JetScape.Menu
             {
                 _menuHandler.GoDown();
             }
-            Assert.That(_menuHandler.GetSelectedOption().getOptionsGS(), Is.EqualTo(GameState.INGAME));
+            Assert.That(
+                _menuHandler.GetSelectedOption().GetOptionsGS(),
+                Is.EqualTo(GameState.INGAME));
             for (int i = 0; i < _options.Count + 1; i++)
             {
                 _menuHandler.GoUp();
             }
-            Assert.That(_menuHandler.GetSelectedOption().getOptionsGS(), Is.EqualTo(GameState.MENU));
+            Assert.That(
+                _menuHandler.GetSelectedOption().GetOptionsGS(),
+                Is.EqualTo(GameState.MENU));
         }
     }
 }

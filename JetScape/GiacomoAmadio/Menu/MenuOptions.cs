@@ -15,24 +15,27 @@ namespace JetScape.Menu
         public const int MUSIC = 7;
         public const int SOUND = 8;
 
-        private enum _MenuOption { START, SETTINGS, QUIT, RECORDS,
-            MENU, RETRY, RESUME, MUSIC, SOUND }
+        private enum MenuOption
+        {
+            START, SETTINGS, QUIT, RECORDS,
+            MENU, RETRY, RESUME, MUSIC, SOUND
+        }
         
-        private Dictionary<_MenuOption, GameState> _Options =
-            new Dictionary<_MenuOption, GameState>() {
-                {_MenuOption.START, GameState.INGAME},
-                {_MenuOption.SETTINGS, GameState.SETTINGS},
-                {_MenuOption.QUIT, GameState.EXIT},
-                {_MenuOption.RECORDS, GameState.RECORDS},
-                {_MenuOption.MENU, GameState.MENU},
-                {_MenuOption.RETRY, GameState.INGAME},
-                {_MenuOption.RESUME, GameState.INGAME},
-                {_MenuOption.MUSIC, GameState.SETTINGS},
-                {_MenuOption.SOUND, GameState.SETTINGS},
+        private readonly Dictionary<MenuOption, GameState> _Options =
+            new Dictionary<MenuOption, GameState>() {
+                {MenuOption.START, GameState.INGAME},
+                {MenuOption.SETTINGS, GameState.SETTINGS},
+                {MenuOption.QUIT, GameState.EXIT},
+                {MenuOption.RECORDS, GameState.RECORDS},
+                {MenuOption.MENU, GameState.MENU},
+                {MenuOption.RETRY, GameState.INGAME},
+                {MenuOption.RESUME, GameState.INGAME},
+                {MenuOption.MUSIC, GameState.SETTINGS},
+                {MenuOption.SOUND, GameState.SETTINGS},
             };
-        private readonly _MenuOption _current;
+        private readonly MenuOption _current;
 
-        public MenuOptions(int val) => _current = (_MenuOption)val;
+        public MenuOptions(int val) => _current = (MenuOption)val;
 
         public static implicit operator int(MenuOptions option) => (int)option._current;
 
@@ -45,7 +48,7 @@ namespace JetScape.Menu
             return new MenuOptions(MENU);
         }
 
-        public GameState getOptionsGS() => _Options[_current];
+        public GameState GetOptionsGS() => _Options[_current];
 
         public override string ToString() => _current.ToString().ToLower();
     }

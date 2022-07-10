@@ -230,7 +230,7 @@ namespace JetScape.game.logics.entities.player
             }
 
             EntityHitbox.UpdatePosition(Position);
-            _hitChecker.interact(e => CheckHit(e));
+            _hitChecker.Interact(e => CheckHit(e));
         }
     }
 }
