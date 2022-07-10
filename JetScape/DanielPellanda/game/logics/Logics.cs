@@ -78,7 +78,6 @@ namespace JetScape.game.logics
                             s.Remove(e);
                         }
                     }
-                    //GameWindow.GAME_DEBUGGER.printLog(Debugger.Option.LOG_CLEAN, "cleaned::" + e.toString()
                 }
             };
         }
@@ -107,11 +106,11 @@ namespace JetScape.game.logics
                 {
                     case GameState.INGAME:
                         if (_gameState == GameState.ENDGAME)
-                        { // RETRY
+                        {
                             ResetGame();
                         }
                         else if (_gameState == GameState.MENU)
-                        { // START
+                        {
                             ResetGame();
                             _entities[EntityType.PLAYER].Add(_playerEntity);
                         }

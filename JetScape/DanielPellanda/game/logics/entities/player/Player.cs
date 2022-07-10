@@ -24,10 +24,7 @@ namespace JetScape.game.logics.entities.player
         private const double FALL_MULTIPLIER_INCREASE = 0.15;
         private const double X_RELATIVE_POSITION = 2.11;
 
-        private const int FLICKERING_SPEED = 10;
         private const int INVINCIBILITY_TIMER = 2;
-
-        private const double ANIMATION_SPEED = 7;
 
         private static readonly int X_POSITION = (int) (GameWindow.ScreenInfo.TileSize * X_RELATIVE_POSITION);
 
@@ -98,11 +95,9 @@ namespace JetScape.game.logics.entities.player
                 {
                     this._invulnerable = true;
                     this._shieldProtected = false;
-                    //GameWindow.GAME_SOUND.play(Sound.SHIELD_DOWN);
                     return;
                 }
                 this.Status = statusAfterHit;
-                //this.SetCauseOfDeath(statusAfterHit);
             }
         }
 
@@ -111,18 +106,12 @@ namespace JetScape.game.logics.entities.player
             switch (entityHit.EntityType)
             {
                 case EntityType.MISSILE:
-                    if (!this._shieldProtected)
-                    {
-                        //GameWindow.GAME_SOUND.stop(Sound.JETPACK);
-                        //GameWindow.GAME_SOUND.play(Sound.MISSILE);
-                    }
                     this.ObstacleHit(PlayerStatus.BURNED);
                     entityHit.Clean();
                     break;
                 case EntityType.SHIELD:
                     this._shieldProtected = true;
                     entityHit.Clean();
-                    //GameWindow.GAME_SOUND.play(Sound.SHIELD_UP);
                     break;
                 default:
                     break;
@@ -137,10 +126,6 @@ namespace JetScape.game.logics.entities.player
                     Position.Y - (int) (_jumpSpeed * _jumpMultiplier)
                     : Y_TOP_LIMIT);
             this.Status = PlayerStatus.JUMP;
-            if (StatusChanged)
-            {
-                //GameWindow.GAME_SOUND.playInLoop(Sound.JETPACK);
-            }
         }
 
         private bool Fall()
@@ -168,10 +153,6 @@ namespace JetScape.game.logics.entities.player
             {
                 this.Status = this.Fall() ? PlayerStatus.FALL : PlayerStatus.LAND;
                 this._fallMultiplier += FALL_MULTIPLIER_INCREASE;
-                if (StatusChanged)
-                {
-                   // GameWindow.GAME_SOUND.stop(Sound.JETPACK);
-                }
             }
         }
 
@@ -194,10 +175,11 @@ namespace JetScape.game.logics.entities.player
 
         private void UpdateScore()
         {
-            if (this._frameTime % 2 == 0)
+            if (this._frameTime % 2 == 0 && _frameTime != 0)
             {
                 this.CurrentScore++;
             }
+            _frameTime++;
         }
 
         public override void Reset()

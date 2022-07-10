@@ -23,34 +23,34 @@ namespace JetScape.test.logics
         [Test]
         public void Test()
         {
-            Assert.True(log.GameState == GameState.MENU);
-            Assert.True(log.Entities[EntityType.PLAYER].Count == 0);
+            Assert.That(log.GameState, Is.EqualTo(GameState.MENU));
+            Assert.That(log.Entities[EntityType.PLAYER].Count, Is.EqualTo(0));
 
             log.GameState = GameState.INGAME;
 
-            Assert.True(log.GameState == GameState.INGAME);
-            Assert.True(log.Entities[EntityType.PLAYER].Count == 1);
+            Assert.That(log.GameState, Is.EqualTo(GameState.INGAME));
+            Assert.That(log.Entities[EntityType.PLAYER].Count, Is.EqualTo(1));
 
             log.GameState = GameState.ENDGAME;
 
-            Assert.True(log.GameState == GameState.ENDGAME);
-            Assert.True(log.Entities[EntityType.PLAYER].Count == 1);
+            Assert.That(log.GameState, Is.EqualTo(GameState.ENDGAME));
+            Assert.That(log.Entities[EntityType.PLAYER].Count, Is.EqualTo(1));
 
             log.GameState = GameState.MENU;
 
-            Assert.True(log.GameState == GameState.MENU);
-            Assert.True(log.Entities[EntityType.PLAYER].Count == 0);
+            Assert.That(log.GameState, Is.EqualTo(GameState.MENU));
+            Assert.That(log.Entities[EntityType.PLAYER].Count, Is.EqualTo(0));
 
             log.GameState = GameState.PAUSED;
 
-            Assert.False(log.GameState == GameState.PAUSED);
-            Assert.True(log.Entities[EntityType.PLAYER].Count == 0);
+            Assert.That(log.GameState, Is.Not.EqualTo(GameState.PAUSED));
+            Assert.That(log.Entities[EntityType.PLAYER].Count, Is.EqualTo(0));
 
             log.GameState = GameState.INGAME;
             log.GameState = GameState.PAUSED;
 
-            Assert.True(log.GameState == GameState.PAUSED);
-            Assert.True(log.Entities[EntityType.PLAYER].Count == 1);
+            Assert.That(log.GameState, Is.EqualTo(GameState.PAUSED));
+            Assert.That(log.Entities[EntityType.PLAYER].Count, Is.EqualTo(1));
 
         }
     }

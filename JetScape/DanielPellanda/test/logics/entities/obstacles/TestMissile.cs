@@ -37,7 +37,7 @@ namespace JetScape.test.logics.entities.obstacles
         [Test]
         public void Test()
         {
-            Assert.True(missile.EntityType == EntityType.MISSILE);
+            Assert.That(missile.EntityType, Is.EqualTo((EntityType) EntityType.MISSILE));
             log.Entities[EntityType.MISSILE].Add(missile);
 
             Assert.False(missile.IsOnScreenBounds);
@@ -70,7 +70,7 @@ namespace JetScape.test.logics.entities.obstacles
             Assert.False(missile.IsOnScreenBounds);
             Assert.False(missile.IsOnClearArea);
             Assert.True(missile.IsOnSpawnArea);
-            Assert.True(log.Entities[EntityType.MISSILE].Count == 0);
+            Assert.That(log.Entities[EntityType.MISSILE].Count, Is.EqualTo(0));
         }
     }
 }

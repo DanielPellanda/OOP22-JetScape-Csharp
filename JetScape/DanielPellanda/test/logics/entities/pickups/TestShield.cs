@@ -37,7 +37,7 @@ namespace JetScape.test.logics.entities.pickups
         [Test]
         public void Test()
         {
-            Assert.True(shield.EntityType == EntityType.SHIELD);
+            Assert.That(shield.EntityType, Is.EqualTo((EntityType) EntityType.SHIELD));
             log.Entities[EntityType.SHIELD].Add(shield);
 
             Assert.False(shield.IsOnScreenBounds);
@@ -70,7 +70,7 @@ namespace JetScape.test.logics.entities.pickups
             Assert.False(shield.IsOnScreenBounds);
             Assert.False(shield.IsOnClearArea);
             Assert.True(shield.IsOnSpawnArea);
-            Assert.True(log.Entities[EntityType.SHIELD].Count == 0);
+            Assert.That(log.Entities[EntityType.SHIELD].Count, Is.EqualTo(0));
         }
     }
 }
