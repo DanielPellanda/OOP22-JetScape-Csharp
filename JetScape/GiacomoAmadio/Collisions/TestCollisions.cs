@@ -23,8 +23,7 @@ namespace JetScape.Collisions
         {
             _lh = new Logics();
             _player = new Player(_lh);
-            _entities = new Dictionary<EntityType, ISet<IEntity>>();
-            _collisionC = new CollisionsChecker(_entities, _player);
+            _collisionC = new CollisionsChecker(_lh.Entities, _player);
             _speedHandler = new SpeedHandler(250.0, 15.0, 0);
         }
 
